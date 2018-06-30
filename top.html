@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<title>心仪公司职位评选</title>
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">  
+	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   <script src="http://139.199.36.142:8007/js/layer.js"></script>
+  <script src="lib/nebPay.js"></script>
+  <script src="lib/nebulas.js"></script>
+	<style>
+    .fakeimg {
+        height: 200px;
+         background: #aaa;
+    }
+  </style>
+</head>
+<body>
+<div class="jumbotron text-center" style="margin-bottom:0">
+  <h1>心仪的公司职位投票</h1>
+  <p>pick你最爱的公司职位</p> 
+</div>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">投票</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li><a href="index.html">主页</a></li>
+        <li class="active"><a href="top.html">推荐公司岗位</a></li>
+        <li><a href="addcompany.html">公司信息添加</a></li>
+        <li><a href="addDepartment.html">公司岗位添加</a></li>
+        <li><a href="#">联系我们</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+      <h2></br></br></h2>
+      <h2>关于评选</h2>
+      <p>刚脱离大学的象牙塔，进入人生下一个旅程。人生充满未知，而我们能做的，就是用前人的经验为后人排出一些坑。公司岗位评选系统，工作过的前辈们在这里添加自己公司和岗位的信息，并进行投票，为刚入职场的新人们提供一些参考；或者可以用于公司内部部门评选，选出你最心仪的部门，最nice的领导，最有钱途的部门。</br></p></br>
+      <h3>公司部门招聘链接</h3>
+      <p>公司招聘广告</p>
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="https://baidu.com">百度</a></li>
+        <li><a href="https://nebulas.io/cn/developers.html">星云</a></li>
+        <li><a href="#">holy(创建中)</a></li>
+      </ul>
+      <hr class="hidden-sm hidden-md hidden-lg">
+    </div>
+    <script>
+        var NebPay = require("nebpay");
+        var nebPay = new NebPay();
+        var dappAddress = "n1o61LwrN3kKrm7X4M6Xix4RJcubQ6Qbpyx";
+        var nebulas = require("nebulas"),
+            Account = nebulas.Account,
+            neb = new nebulas.Neb();
+        neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
+            $(function () {
+        show();
+    });
+        function show() {
+            layer.load(0, {
+                time: 2500
+            });
+            var from = Account.NewAccount().getAddressString();
+            var value = "0";
+            var nonce = "0"
+            var gas_price = "1000000"
+            var gas_limit = "2000000"
+            var callFunction = "forEachDepartment";
+            var callArgs = "[\"" + 100 + "\",\"" + 0 + "\"]";
+            var contract = {
+                "function": callFunction,
+                "args": callArgs
+            }
+            neb.api.call(from, dappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+                cbSearch(resp)
+            }).catch(function (err) {
+                console.log("error:" + err.message)
+            });
+        }
+        function cbSearch(resp) {
+            $("#showMsg").html("");
+            var re = resp.result;
+            if (re === 'null' || re == "" || re.length == 2) {
+                layer.msg("未能在平台找到相关信息，可以去添加公司岗位信息");
+            } else {
+                try {
+                    var messageArray = [];
+                    var arr = re.substr(1).split("*");
+                    for (var i = 0; i < arr.length; i++) {
+                        var arr_item = arr[i].split("`");
+                        if (arr_item.length >= 2) {
+            //result += key + '`' + object.cId + '`' + object.cName + '`' + object.dName + '`' + object.dDes + '`' + object.count + '`' + object.from + '*';
+                            var key = arr_item[0];
+                            var cId = arr_item[1];
+                            var cName = arr_item[2];
+                            var dName = arr_item[3];
+                            var dDes = arr_item[4];
+                            var count = arr_item[5];
+                            var from = arr_item[6];
+                                    $("#showMsg").append(
+                                    "<h2>部门姓名:" + dName + "</h2>" +
+                                    "<h5>公司姓名:" + cName + "</h5>"+
+                                    "<div class="+"\"fakeimg\""+">公司图片</div>" +
+                                    "<p>部门介绍:" + dDes + "</p>" +
+                                    "<a href=\"vote.html?id=" + cId + "\">投票</a>"
+                                    );
+                            var json = {
+                                "key": key,
+                                "cId": cId,
+                                "cName": cName,
+                                "dName": dName,
+                                "dDes": dDes,
+                                "count": count,
+                                "from": from
+                            };
+                            messageArray.push(json);
+                        }
+                    }
+                    var cidOrder = messageArray;
+                    if (cidOrder.length > 0) {
+                        $.each(cidOrder,
+                            function (index, value) {
+                                $("#showMsg").append(
+                                    "<h2>部门姓名:" + value.dName + "</h2>" +
+                                    "<h5>公司姓名:" + value.cName + "</h5>"+
+                                    "<div class="+"\"fakeimg\""+">公司图片</div>" +
+                                    "<p>部门介绍:" + value.dDes + "</p>" +
+                                    "<a href=\"vote.html?id=" + value.cId + "\">投票</a>"
+                                    );
+                            });
+                    } else {
+                        layer.msg("未能在平台找到相关信息，可以去添加公司岗位信息");
+                    }
+                } catch (err) {
+                }
+
+            }
+        }
+
+
+    </script>
+    <div class="col-sm-8" id="showMsg">
+<!--       <h2>标题</h2>
+      <h5>副标题</h5>
+      <div class="fakeimg">公司图片</div>
+      <p>一些文本..</p>
+      <p>菜鸟教程，学的不仅是技术，更是梦想！！！菜鸟教程，学的不仅是技术，更是梦想！！！菜鸟教程，学的不仅是技术，更是梦想！！！</p>
+      <br>
+      <h2>标题</h2>
+      <h5>副标题</h5>
+      <div class="fakeimg">公司图片</div>
+      <p>一些文本..</p>
+      <p>菜鸟教程，学的不仅是技术，更是梦想！！！菜鸟教程，学的不仅是技术，更是梦想！！！菜鸟教程，学的不仅是技术，更是梦想！！！</p> -->
+    </div>
+        
+  </div>
+</div>
+
+<div class="jumbotron text-center" style="margin-bottom:0">
+  <p>公司职位评选系统是基于星云链的一个的投票系统。版权所有！</p>
+</div>
+</body>
+</html>

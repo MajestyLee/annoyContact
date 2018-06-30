@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"> 
+    <title>心仪公司职位评选</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">  
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="http://139.199.36.142:8007/js/layer.js"></script>
+  <script src="lib/nebPay.js"></script>
+  <script src="lib/nebulas.js"></script>
+    <style>
+    .fakeimg {
+        height: 200px;
+         background: #aaa;
+    }
+  </style>
+</head>
+<body>
+<div class="jumbotron text-center" style="margin-bottom:0">
+  <h1>心仪的公司职位投票</h1>
+  <p>pick你最爱的公司职位</p> 
+</div>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">投票</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li><a href="index.html">主页</a></li>
+        <li><a href="top.html">推荐公司岗位</a></li>
+        <li class="active"><a href="addcompany.html">公司信息添加</a></li>
+        <li><a href="addDepartment.html">公司信息岗位添加</a></li>
+        <li><a href="#">联系我们</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+      <h2></br></br></h2>
+      <h2>关于评选</h2>
+      <p>刚脱离大学的象牙塔，进入人生下一个旅程。人生充满未知，而我们能做的，就是用前人的经验为后人排出一些坑。公司岗位评选系统，工作过的前辈们在这里添加自己公司和岗位的信息，并进行投票，为刚入职场的新人们提供一些参考；或者可以用于公司内部部门评选，选出你最心仪的部门，最nice的领导，最有钱途的部门。</br></p></br>
+      <h3>公司部门招聘链接</h3>
+      <p>公司招聘广告</p>
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="https://baidu.com">百度</a></li>
+        <li><a href="https://nebulas.io/cn/developers.html">星云</a></li>
+        <li><a href="#">holy(创建中)</a></li>
+      </ul>
+      <hr class="hidden-sm hidden-md hidden-lg">
+    </div>
+    <script>
+        var NebPay = require("nebpay");
+        var nebPay = new NebPay();
+        var dappAddress = "n1o61LwrN3kKrm7X4M6Xix4RJcubQ6Qbpyx";
+
+        //表单提交上传图片
+        function upload() {
+            if (typeof (webExtensionWallet) === "undefined") {
+                var index = layer.alert('未安装WebExtensionWallet-master，请先下载钱包插件', function () {
+                    layer.close(index);
+                });
+                $("#iptUp").attr("disabled", true);
+                return false;
+            }
+
+            //var path = document.getElementById("company").value;
+            if ($.trim($("#name").val()) == '') {
+                var index = layer.alert('请输入公司名称', function () {
+                    layer.close(index);
+                });
+                return false;
+            }
+            if ($.trim($("#desc").val()) == '') {
+                var index = layer.alert('请输入公司介绍', function () {
+                    layer.close(index);
+                });
+                return false;
+            }
+            if ($.trim($("#size").val()) == '') {
+                var index = layer.alert('请输入公司规模', function () {
+                    layer.close(index);
+                });
+                return false;
+            }
+            if ($("#desc").val().length>200) {
+                var index = layer.alert('公司介绍太长', function () {
+                    layer.close(index);
+                });
+                return false;
+            }
+            var id = Math.floor(Math.random()*(100000)+1);
+            $("#iptUp").val("正在提交中...");
+            $("#iptUp").attr("ddisabled", true);
+            var to = 'n1o61LwrN3kKrm7X4M6Xix4RJcubQ6Qbpyx';
+            var value = "0";
+            var callFunction = "save";
+            var callArgs = "[\"" + id + "\",\"" +
+                $("#name").val() + "\",\"" +
+                $("#size").val() + "\",\"" +
+                $("#desc").val() + "\",\"\"]";
+            nebPay.call(to, value, callFunction, callArgs, {
+                listener: cbPush
+            });
+
+        }
+        function cbPush(resp) {
+            if (resp.txhash) {
+                setTimeout(function () {
+                    var index = layer.alert('正在请求中...星云交易号为:' + resp.txhash, function () {
+                        layer.close(index);
+                        location.reload();
+                    });
+                }, 3000);
+            }
+            else {
+                layer.msg('您已经取消操作');
+            }
+        }
+    </script>
+    <div class="col-sm-8" id="showMsg">
+      </br></br>
+                            <form>
+                            <h2><span>公司名称:</span>
+                            <input type="text" class="text" id="name" placeholder="公司名称" /></h2>
+                            <h2><span>公司规模:</span>
+                            <input type="text" class="text" id="size" placeholder="公司规模" /></h2>
+                            <h2><span>公司简介:</span></h2>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" class="text" id="desc" style="height:280px;width: 340px" placeholder="" />
+                            <h2></h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="btn-success active" type="button" id="iptUp" onclick="upload()" value="提交信息">
+                            </form>
+    </div>
+        
+  </div>
+</div>
+
+<div class="jumbotron text-center" style="margin-bottom:0">
+  <p>公司职位评选系统是基于星云链的一个的投票系统。版权所有！</p>
+</div>
+</body>
+</html>

@@ -1,339 +1,149 @@
+
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5, user-scalable=no">
-    <meta name="x5-fullscreen" content="true">
-    <meta name="full-screen" content="yes">
-
-    <title>Super Dictionary</title>
-    <link rel="stylesheet" href="lib/bootstrap-4.0.0-dist/css/bootstrap.min.css">
+    <meta charset="utf-8"> 
+    <title>心仪公司职位评选</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">  
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="http://139.199.36.142:8007/js/layer.js"></script>
+  <script src="lib/nebPay.js"></script>
+  <script src="lib/nebulas.js"></script>
     <style>
-        .logo {
-            width: 60%;
-            height: 500px;
-            margin: auto;
-        }
-
-        .name {
-            text-align: center;
-            font-size: 66px;
-            text-shadow: 3px 5px grey, 1px 1px #333;
-        }
-
-        .img {
-            width: 48%;
-            height: 53%;
-            margin: auto;
-            margin-top: 38px;
-        }
-
-        .img img {
-            width: 100%;
-            height: 100%;
-        }
-
-        .search {
-            width: 80%;
-            height: 100px;
-            margin: auto;
-        }
-
-        .noExtension {
-            width: 60%;
-            height: 100px;
-            margin: auto;
-            font-size: 23px;
-        }
-
-        #search_value {
-            width: 80%;
-            height: 50px;
-            box-shadow: 3px 5px grey, 1px 1px #333;
-        }
-
-        .search button {
-            width: 18%;
-            height: 50px;
-            margin-left: 6px;
-            box-shadow: 3px 5px grey, 1px 1px #333;
-        }
-
-        @keyframes rotate {
-            0% { transform:rotateY(0deg);}
-            25% { transform:rotateY(180deg);}
-            50% { transform:rotateY(0deg);}
-            75% { transform:rotateY(180deg);}
-            100% { transform:rotateY(0deg);}
-        }
-
-        .logo_rotate {
-            /*
-            animation: rotate 10s infinite;
-            animation-fill-mode: forwards;
-            animation-timing-function: linear;
-                */
-            /*  当动画结束时，让<div>元素保留上一个关键帧的样式值 */
-        }
-
-        .result_success {
-            width: 60%;
-            margin: auto;
-            font-size: 22px
-        }
-
-        .result_faile{
-            width: 60%;
-            margin: auto;
-            font-size: 22px
-        }
-
-        .add_banner{
-            width: 80%;
-            margin: auto;
-        }
-
-        .add_banner input{
-            width: 80%;
-            height: 50px;
-            box-shadow: 3px 5px grey, 1px 1px #333;
-        }
-
-        .add_banner button{
-            width: 18%;
-            height: 50px;
-            margin-left: 6px;
-            box-shadow: 3px 5px grey, 1px 1px #333;
-        }
-
-        #search_banner{
-            font-size: 50px;
-            border-bottom: 1px solid black;
-        }
-
-        p{
-            text-indent:2em;
-            font-size: 30px;
-        }
-
-        .hide{
-            display: none;
-        }
-
-        .contenner{
-            background: url("img/bg2.jpeg");
-            height: 1500px;
-        }
-
-        .author{
-            text-align: right;
-        }
-        .author p{
-            display: inline-block;
-            font-size: 18px;
-        }
-    </style>
+    .fakeimg {
+        height: 200px;
+         background: #aaa;
+    }
+  </style>
 </head>
-
 <body>
-<div class="contenner">
-    <div class="logo">
-        <div class="name">Annoy Contact</div>
-        <div class="img logo_rotate">
-            <img src="img/timg.png" alt="">
-        </div>
-    </div>
-    <div class="noExtension hide" id="noExtension">
-        NOTE: Please install <a target="_blank" href="https://github.com/ChengOrangeJu/WebExtensionWallet">WebExtensionWallet</a>  to use Annoy Contact
-    </div>
-    <div class="search">
-        <input id="search_value" type="text">
-        <button id=search>contact</button>
-    </div>
-
-    <div class="result_success hide">
-        <div id=search_banner></div>
-        <p id=search_result> wait for content </p>
-        <div class="author">
-            <i><p> Author:</p> <p id=search_result_author> dasdajkajksdhjasdkjahdkjad</p></i>
-        </div>
-    </div>
-
-    <div class="result_faile hide">
-        Failed to find related contact. Do you want to <button id="add">add</button> infromation for "<i id="result_faile_add">asd</i>"?
-    </div>
-
-    <div class="add_banner hide">
-        <input type="text" id="add_value" placeholder="input contact for your keyword,such as QQ or others">
-        <button id="push">submit</button>
-    </div>
+<div class="jumbotron text-center" style="margin-bottom:0">
+  <h1>心仪的公司职位投票</h1>
+  <p>pick你最爱的公司职位</p> 
 </div>
-<script src=lib/jquery-3.3.1.min.js></script>
-<script src=lib/nebPay.js></script>
-<script src=lib/bootstrap-4.0.0-dist/js/bootstrap.min.js></script>
-<script src=lib/nebulas.js></script>
-<script>
 
-    "use strict";
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">投票</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">主页</a></li>
+        <li><a href="top.html">推荐公司岗位</a></li>
+        <li><a href="addcompany.html">公司信息添加</a></li>
+        <li><a href="addDepartment.html">公司岗位添加</a></li>
+        <li><a href="#">联系我们</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
-
-    // $("#search_value").attr("disabled",true)
-    // $("#search").attr("disabled",true)
-    // //to check if the extension is installed
-    // //if the extension is installed, var "webExtensionWallet" will be injected in to web page
-    // if(typeof(webExtensionWallet) === "undefined"){
-    //     //alert ("Extension wallet is not installed, please install it first.")
-    //     $("#noExtension").removeClass("hide")
-    // }else{
-    //     $("#search_value").attr("disabled",false)
-    //     $("#search").attr("disabled",false)
-    // }
-
-    var dappAddress = "n1yWE8fcMDPtmn4E27BHQuxMtScRtJkSPp6";
-
-    //here we use neb.js to call the "get" function to search from the Dictionary
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+      <h2></br></br></h2>
+      <h2>关于评选</h2>
+      <p>刚脱离大学的象牙塔，进入人生下一个旅程。人生充满未知，而我们能做的，就是用前人的经验为后人排出一些坑。公司岗位评选系统，工作过的前辈们在这里添加自己公司和岗位的信息，并进行投票，为刚入职场的新人们提供一些参考；或者可以用于公司内部部门评选，选出你最心仪的部门，最nice的领导，最有钱途的部门。</br></p></br>
+      <h3>公司部门招聘链接</h3>
+      <p>公司招聘广告</p>
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="https://baidu.com">百度</a></li>
+        <li><a href="https://nebulas.io/cn/developers.html">星云</a></li>
+        <li><a href="#">holy(创建中)</a></li>
+      </ul>
+      <hr class="hidden-sm hidden-md hidden-lg">
+    </div>
+    <script>
+    var NebPay = require("nebpay");
+    var nebPay = new NebPay();
+    var dappAddress = "n1o61LwrN3kKrm7X4M6Xix4RJcubQ6Qbpyx";
     var nebulas = require("nebulas"),
         Account = nebulas.Account,
         neb = new nebulas.Neb();
-    neb.setRequest(new nebulas.HttpRequest("https://mainnet.nebulas.io"));
-
-    // 搜索功能: 查找Super-Dictionary 中有没有该词条
-    $("#search").click(function(){
-        // $("#search_value").val() 搜索框内的值
-
+    neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
+    $(function () {
+        show();
+    });
+    function show() {
+        layer.load(0, {
+            time: 2500
+        });
         var from = Account.NewAccount().getAddressString();
-
         var value = "0";
         var nonce = "0"
         var gas_price = "1000000"
         var gas_limit = "2000000"
-        var callFunction = "get";
-        //var callArgs = "[\"" + $("#search_value").val() + "\"]"; //in the form of ["args"]
-        var arg = $("#search_value").val()
-        var callArgs = JSON.stringify([arg]);  //推荐用 JSON.stringify 来生成参数字符串,这样会避免出错!
+        var callFunction = "forEach";
+        var callArgs = "[\"" + 100 + "\",\"" + 0 + "\"]";
         var contract = {
             "function": callFunction,
             "args": callArgs
         }
-
-        neb.api.call(from,dappAddress,value,nonce,gas_price,gas_limit,contract).then(function (resp) {
+        neb.api.call(from, dappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
             cbSearch(resp)
         }).catch(function (err) {
-            //cbSearch(err)
             console.log("error:" + err.message)
-        })
-
-    })
-
-    //return of search,
-    function cbSearch(resp) {
-        var result = resp.result    ////resp is an object, resp.result is a JSON string
-        console.log("return of rpc call: " + JSON.stringify(result))
-
-        var resultString = JSON.stringify(result);
-        if(resultString.search("key") !== -1 && resultString.search("value") !== -1){
-            result = JSON.parse(result)
-            $(".add_banner").addClass("hide");
-            $(".result_faile").addClass("hide");
-
-            $("#search_banner").text($("#search_value").val())
-            $("#search_result").text("联系方式:" + result.value)
-            $("#search_result_author").text(result.author)
-
-            $(".result_success").removeClass("hide");
-
-        }
-        if(resultString.search('"null"') !== -1){
-            $(".add_banner").addClass("hide");
-            $(".result_success").addClass("hide");
-
-            $("#result_faile_add").text($("#search_value").val())
-
-            $(".result_faile").removeClass("hide");
-
-        }
-        if(resultString.search("error") !== -1){
-            $(".add_banner").addClass("hide");
-            $(".result_faile").addClass("hide");
-
-            $("#search_banner").text($("#search_value").val())
-            $("#search_result").text(result)
-            $("#search_result_author").text("")
-
-            $(".result_success").removeClass("hide");
-
-        }
-
-    }
-
-    // 添加交友功能: 向annoy-contact 中添加词条
-    $("#add").click(function() {
-        $(".result_faile").addClass("hide");
-        $(".add_banner").removeClass("hide");
-
-        $("#add_value").val("")
-    })
-
-    var NebPay = require("nebpay");     //https://github.com/nebulasio/nebPay
-    var nebPay = new NebPay();
-    var serialNumber
-    var callbackUrl = NebPay.config.mainnetUrl;   //如果合约在主网,则使用这个
-    //var callbackUrl = NebPay.config.testnetUrl;   //
-
-    $("#push").click(function() {
-
-        var to = dappAddress;
-        var value = "0";
-        var callFunction = "save"
-        //var callArgs = "[\"" + $("#search_value").val() + "\",\"" + $("#add_value").val() + "\"]"
-        var arg1 = $("#search_value").val(),
-            arg2 = $("#add_value").val();
-        var callArgs = JSON.stringify([arg1, arg2]);
-
-        serialNumber = nebPay.call(to, value, callFunction, callArgs, {    //使用nebpay的call接口去调用合约,
-            listener: cbPush,       //设置listener, 处理交易返回信息
-            callback: callbackUrl
         });
-
-        intervalQuery = setInterval(function () {
-            funcIntervalQuery();
-        }, 10000);
-    });
-
-    var intervalQuery
-
-    function funcIntervalQuery() {
-        var options = {
-            callback: callbackUrl
-        }
-        nebPay.queryPayInfo(serialNumber,options)   //search transaction result from server (result upload to server by app)
-            .then(function (resp) {
-                console.log("tx result: " + resp)   //resp is a JSON string
-                var respObject = JSON.parse(resp)
-                if(respObject.code === 0){
-                    clearInterval(intervalQuery);
-                    alert(`set ${$("#search_value").val()} succeed!`);
+    }
+    function cbSearch(resp) {
+        $("#showMsg").html("");
+        var re = resp.result;
+        if (re === 'null' || re == "" || re.length == 2) {
+            layer.msg("未能在平台找到相关信息，可以去添加公司岗位信息");
+        } else {
+            try {
+                var messageArray = [];
+                var arr = re.substr(1).split("*");
+                for (var i = 0; i < arr.length; i++) {
+                    var arr_item = arr[i].split("`");
+                    if (arr_item.length >= 2) {
+                        var key = arr_item[0];
+                        var companyName = arr_item[1];
+                        var companySize = arr_item[2];
+                        var comDes = arr_item[3];
+                        var count = arr_item[4];
+                        var from = arr_item[5];
+                                            $("#showMsg").append(
+                                    "<h2>公司名称:" + companyName + "</h2>" +
+                                    "<h5>公司规模:" + companySize + "</h5>"+
+                                    "<div class="+"fakeimg"+">公司图片</div>" +
+                                    "<p>公司介绍:" + comDes + "</p>" +
+                                    "<p><a href=\"vote.html?id=" + key + "\">投票</a></p>");
+                    }
                 }
-            })
-            .catch(function (err) {
-                console.log(err);
-            });
-    }
+                
+            } catch (err) {
+            }
 
-    function cbPush(resp) {
-        console.log("response of push: " + JSON.stringify(resp))
-        var respString = JSON.stringify(resp);
-        if(respString.search("rejected by user") !== -1){
-            clearInterval(intervalQuery)
-            alert(respString)
-        }else if(respString.search("txhash") !== -1){
-            //alert("wait for tx result: " + resp.txhash)
         }
     }
-
 </script>
-</body>
+    <div class="col-sm-8" id="showMsg">
+<!--       <h2>标题</h2>
+      <h5>副标题</h5>
+      <div class="fakeimg">公司图片</div>
+      <p>一些文本..</p>
+      <p>菜鸟教程，学的不仅是技术，更是梦想！！！菜鸟教程，学的不仅是技术，更是梦想！！！菜鸟教程，学的不仅是技术，更是梦想！！！</p>
+      <br>
+      <h2>标题</h2>
+      <h5>副标题</h5>
+      <div class="fakeimg">公司图片</div>
+      <p>一些文本..</p>
+      <p>菜鸟教程，学的不仅是技术，更是梦想！！！菜鸟教程，学的不仅是技术，更是梦想！！！菜鸟教程，学的不仅是技术，更是梦想！！！</p> -->
+    </div>
+        
+  </div>
+</div>
 
+<div class="jumbotron text-center" style="margin-bottom:0">
+  <p>公司职位评选系统是基于星云链的一个的投票系统。版权所有！</p>
+</div>
+</body>
 </html>
